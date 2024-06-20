@@ -5,6 +5,10 @@ from fuelai.errors_extensions import FuelAIBackendError, FuelAIAPICredsMissingEr
 
 ENDPOINTS = {
     'PROJECT': '/apis/project',
+    'PROJECTS': '/apis/projects',
+
+    'TASKS': '/apis/tasks',
+
     'DOWNLOAD_ANSWERS': '/apis/download-answers',
 }
 

@@ -4,6 +4,8 @@ import json
 
 from fuelai.errors_extensions import FuelAIBackendError, FuelAIAPICredsMissingError, FuelAIRequiredParamError
 from fuelai.api_client import ENDPOINTS, FuelAIAPIClient
+from fuelai.tasks import Task
+from fuelai.answers import Answer
 
 class Project(FuelAIAPIClient):
 
@@ -75,7 +77,25 @@ class Project(FuelAIAPIClient):
             'replication': replication,
         }
         if scrapingInfo is not None:
-            params = {**params, **scrapingInfo.to_dict()}
+            params['scrapingInfo'] = { **scrapingInfo }
         response_json = cls.post(ENDPOINTS['PROJECT'], params, api_key=api_key, api_secret=api_secret)
         return cls(**response_json)
+
+    @classmethod
+    def getAll(cls, api_key: str = None, api_secret: str = None):
+        response_json = cls.get(ENDPOINTS['PROJECTS'], {}, api_key=api_key, api_secret=api_secret)
+        projects = [cls(**it) for it in response_json.get('projects', [])]
+        return projects
+
+    def uploadTasks(self, tasksRawArray: list, api_key: str = None, api_secret: str = None):
+        self.tasks = Task.uploadTasks(self.orgProjectId, tasksRawArray, api_key, api_secret);
+        return self.tasks;
+
+    def getAllTasks(self, api_key: str = None, api_secret: str = None):
+        self.tasks = Task.getAll(self.orgProjectId, api_key, api_secret);
+        return self.tasks;
+
+    def downloadAnswers(self, api_key: str = None, api_secret: str = None):
+        self.answers = Answer.downloadAnswers(self.orgProjectId, api_key, api_secret);
+        return self.answers;
 
