@@ -38,6 +38,8 @@ class Answer(FuelAIAPIClient):
     @classmethod
     def downloadAnswers(cls,
                         orgProjectId: str,
+                        pageNo: int = None,
+                        pageSize: int = None,
                         api_key: str = None,
                         api_secret: str = None):
         '''
@@ -55,6 +57,8 @@ class Answer(FuelAIAPIClient):
 
         params = {
             'orgProjectId': orgProjectId,
+            'pageNo': pageNo,
+            'pageSize': pageSize,
         }
         response_json = cls.get(ENDPOINTS['DOWNLOAD_ANSWERS'], params, api_key=api_key, api_secret=api_secret)
         answers = [cls(**ans_json) for ans_json in response_json.get('data', [])]
