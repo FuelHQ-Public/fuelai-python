@@ -87,6 +87,11 @@ class Project(FuelAIAPIClient):
         projects = [cls(**it) for it in response_json.get('projects', [])]
         return projects
 
+    @classmethod
+    def getByOrgProjectId(cls, orgProjectId: str, api_key: str = None, api_secret: str = None):
+        response_json = cls.get(ENDPOINTS['PROJECT'], { 'orgProjectId': orgProjectId }, api_key=api_key, api_secret=api_secret)
+        return cls(**response_json)
+
     def uploadTasks(self, tasksRawArray: list, api_key: str = None, api_secret: str = None):
         self.tasks = Task.uploadTasks(self.orgProjectId, tasksRawArray, api_key, api_secret);
         return self.tasks;
